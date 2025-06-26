@@ -11,6 +11,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ValidationService {
+
     private final List<InputValidation> validators;
 
     public List<ValidationErrorDTO> validate(ScanRequestDTO dto) {
@@ -22,5 +23,6 @@ public class ValidationService {
 
         return errors;
     }
+
 }
 

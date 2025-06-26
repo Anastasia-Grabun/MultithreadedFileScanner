@@ -39,8 +39,8 @@ class FileFinder {
 
     private List<String> filterFilesByPattern(List<Path> paths, Pattern pattern) throws InterruptedException, ExecutionException {
         ExecutorService executor = Executors.newThreadPerTaskExecutor(Thread.ofVirtual().factory());
-        try {
 
+        try {
             List<Future<String>> futures = new ArrayList<>();
             for (Path path : paths) {
                 futures.add(executor.submit(() -> {
