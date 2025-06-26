@@ -1,5 +1,7 @@
 package org.example.util;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -8,6 +10,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 @Component
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class ErrorCodeUtil {
 
     private final Properties props;
