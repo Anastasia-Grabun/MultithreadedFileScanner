@@ -1,6 +1,9 @@
 package org.example.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.List;
 
-public record ScanResultDTO(List<String> files) {}
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public record ScanResultDTO(List<String> files, List<ValidationErrorDTO> errors) {}
+
 
