@@ -1,4 +1,4 @@
-package org.example.validations;
+package org.example.core.validations;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

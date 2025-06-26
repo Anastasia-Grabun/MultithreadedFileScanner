@@ -1,5 +1,6 @@
-package org.example.services;
+package org.example.core.services;
 
+import org.example.core.util.MaskToRegexConverter;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,7 +15,6 @@ import java.util.concurrent.Future;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import static org.example.util.MaskToRegexConverter.convert;
 
 @Component
 class FileFinder {
@@ -27,7 +27,7 @@ class FileFinder {
     }
 
     private Pattern compilePattern(String mask) {
-        return Pattern.compile(convert(mask));
+        return Pattern.compile(MaskToRegexConverter.convert(mask));
     }
 
     private List<Path> listFiles(String startDir) throws IOException {

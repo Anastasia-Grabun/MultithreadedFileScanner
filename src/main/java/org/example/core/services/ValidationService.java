@@ -1,9 +1,9 @@
-package org.example.services;
+package org.example.core.services;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dto.ScanRequestDTO;
 import org.example.dto.ValidationErrorDTO;
-import org.example.validations.InputValidation;
+import org.example.core.validations.InputValidation;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,9 +1,9 @@
-package org.example.validations;
+package org.example.core.validations;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.ValidationErrorDTO;
-import org.example.util.ErrorCodeUtil;
+import org.example.core.util.ErrorCodeUtil;
 import org.springframework.stereotype.Component;
 
 @Component

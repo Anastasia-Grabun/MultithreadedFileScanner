@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.ScanRequestDTO;
 import org.example.dto.ScanResultDTO;
-import org.example.services.ScannerService;
+import org.example.core.services.ScannerService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
