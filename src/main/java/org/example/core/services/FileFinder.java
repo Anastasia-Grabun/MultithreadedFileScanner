@@ -1,70 +1,33 @@
 package org.example.core.services;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import org.example.core.services.filters.FileSearchFilter;
+import org.example.core.services.filters.FilterFactory;
 import org.example.core.util.MaskToRegexConverter;
+import org.example.dto.SearchParams;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
-class FileFinder {
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+public class FileFinder {
 
-    List<String> findFiles(String startDir, String mask) throws IOException, InterruptedException, ExecutionException {
-        Pattern pattern = compilePattern(mask);
-        List<Path> allFiles = listFiles(startDir);
+    private final FileScanner scanner;
+    private final FileFilterService filterService;
+    private final FilterFactory filterFactory;
 
-        return filterFilesByPattern(allFiles, pattern);
-    }
+    public List<String> findFiles(String startDir, String mask, SearchParams searchParams)
+            throws IOException, InterruptedException {
 
-    private Pattern compilePattern(String mask) {
-        return Pattern.compile(MaskToRegexConverter.convert(mask));
-    }
+        Pattern pattern = Pattern.compile(MaskToRegexConverter.convert(mask));
+        FileSearchFilter filter = filterFactory.createFilter(searchParams);
+        List<Path> allFiles = scanner.scan(startDir);
 
-    private List<Path> listFiles(String startDir) throws IOException {
-        try (Stream<Path> stream = Files.walk(Paths.get(startDir))) {
-            return stream.filter(Files::isRegularFile)
-                    .collect(Collectors.toList());
-        }
-    }
-
-    private List<String> filterFilesByPattern(List<Path> paths, Pattern pattern) throws InterruptedException, ExecutionException {
-        ExecutorService executor = Executors.newThreadPerTaskExecutor(Thread.ofVirtual().factory());
-
-        try {
-            List<Future<String>> futures = new ArrayList<>();
-            for (Path path : paths) {
-                futures.add(executor.submit(() -> {
-                    String fileName = path.getFileName().toString();
-                    if (pattern.matcher(fileName).matches()) {
-                        return path.toString();
-                    } else {
-                        return null;
-                    }
-                }));
-            }
-
-            List<String> matchedFiles = new ArrayList<>();
-            for (Future<String> future : futures) {
-                String result = future.get();
-                if (result != null) {
-                    matchedFiles.add(result);
-                }
-            }
-
-            return matchedFiles;
-        } finally {
-            executor.shutdown();
-        }
+        return filterService.applyFilters(allFiles, pattern, filter);
     }
 
 }

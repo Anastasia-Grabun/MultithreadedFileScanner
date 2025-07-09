@@ -1,7 +1,9 @@
-package org.example.core.validations;
+package org.example.core.validations.input;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.example.core.validations.ValidationErrorFactory;
+import org.example.core.validations.input.InputValidation;
 import org.example.dto.ScanRequestDTO;
 import org.example.dto.ValidationErrorDTO;
 import org.springframework.stereotype.Component;

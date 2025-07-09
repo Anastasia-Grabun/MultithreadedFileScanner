@@ -8,7 +8,7 @@ import org.example.dto.ValidationErrorDTO;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -17,31 +17,44 @@ import java.util.concurrent.ExecutionException;
 public class ScannerService {
 
     private final ValidationService validationService;
+    private final FilterValidationService filterValidationService;
     private final FileFinder fileFinder;
 
-    public ScanResultDTO scan(ScanRequestDTO scanRequestDTO) {
-        List<ValidationErrorDTO> errors = validationService.validate(scanRequestDTO);
-        if (hasErrors(errors)) {
-            return new ScanResultDTO(Collections.emptyList(), errors);
+    public ScanResultDTO scan(ScanRequestDTO request) {
+        List<ValidationErrorDTO> validationErrors = collectValidationErrors(request);
+        if (!validationErrors.isEmpty()) {
+            return ScanResultDTO.withErrors(validationErrors);
         }
 
-        List<String> files = performScan(scanRequestDTO.path(), scanRequestDTO.mask());
-
-        return new ScanResultDTO(files, Collections.emptyList());
+        return performFileScan(request);
     }
 
-    private boolean hasErrors(List<ValidationErrorDTO> errors) {
-        return errors != null && !errors.isEmpty();
+    private List<ValidationErrorDTO> collectValidationErrors(ScanRequestDTO request) {
+        List<ValidationErrorDTO> errors = new ArrayList<>();
+        errors.addAll(validationService.validate(request));
+        errors.addAll(filterValidationService.validate(request));
+
+        return errors;
     }
 
-    private List<String> performScan(String path, String mask) {
-        String startDir = getStartDirectory(path);
+    private ScanResultDTO performFileScan(ScanRequestDTO request) {
         try {
-            return fileFinder.findFiles(startDir, mask);
-        } catch (IOException | InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-            return Collections.emptyList();
+            List<String> files = fileFinder.findFiles(
+                    getStartDirectory(request.path()),
+                    request.mask(),
+                    request.searchParams()
+            );
+            return ScanResultDTO.withFiles(files);
+        } catch (IOException | InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return errorResult("File search interrupted or IO error: " + e.getMessage());
         }
+    }
+
+    private ScanResultDTO errorResult(String message) {
+        return ScanResultDTO.withErrors(List.of(
+                new ValidationErrorDTO("SCAN_ERROR", message)
+        ));
     }
 
     private String getStartDirectory(String path) {

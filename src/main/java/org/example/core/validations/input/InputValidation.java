@@ -1,4 +1,4 @@
-package org.example.core.validations;
+package org.example.core.validations.input;
 
 import org.example.dto.ScanRequestDTO;
 import org.example.dto.ValidationErrorDTO;
