@@ -21,8 +21,8 @@ public class FilterValidationService {
         }
 
         return validators.stream()
-                .filter(v -> v.isApplicable(request.searchParams()))
-                .flatMap(v -> v.validate(request.searchParams()).stream())
+                .filter(v -> v.isApplicable(request))
+                .flatMap(v -> v.validate(request).stream())
                 .collect(Collectors.toList());
     }
 

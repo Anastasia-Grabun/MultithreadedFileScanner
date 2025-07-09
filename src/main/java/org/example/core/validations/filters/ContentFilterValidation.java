@@ -3,7 +3,7 @@ package org.example.core.validations.filters;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.example.core.validations.ValidationErrorFactory;
-import org.example.dto.SearchParams;
+import org.example.dto.ScanRequestDTO;
 import org.example.dto.ValidationErrorDTO;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
@@ -16,20 +16,22 @@ class ContentFilterValidation implements FilterValidation {
     private final ValidationErrorFactory errorFactory;
 
     @Override
-    public boolean isApplicable(SearchParams params) {
-        return params.contentContains() != null;
+    public boolean isApplicable(ScanRequestDTO request) {
+        return request.searchParams() != null &&
+                request.searchParams().contentContains() != null;
     }
 
     @Override
-    public List<ValidationErrorDTO> validate(SearchParams params) {
+    public List<ValidationErrorDTO> validate(ScanRequestDTO request) {
         List<ValidationErrorDTO> errors = new ArrayList<>();
-        String namePattern = params.namePattern();
 
-        if (namePattern == null || !namePattern.matches(".*\\.txt$")) {
-            errors.add(errorFactory.buildError("ERROR_CODE_7"));
+        String mask = request.mask();
+        if (mask == null || !mask.endsWith(".txt")) {
+            errors.add(errorFactory.buildError("ERROR_CODE_7")); // "Content search requires *.txt mask"
         }
 
         return errors;
     }
 
 }
+

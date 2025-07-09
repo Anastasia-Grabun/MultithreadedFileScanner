@@ -3,6 +3,7 @@ package org.example.core.validations.filters;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.example.core.validations.ValidationErrorFactory;
+import org.example.dto.ScanRequestDTO;
 import org.example.dto.SearchParams;
 import org.example.dto.ValidationErrorDTO;
 import org.springframework.stereotype.Component;
@@ -16,12 +17,14 @@ class SizeFilterValidation implements FilterValidation {
     private final ValidationErrorFactory errorFactory;
 
     @Override
-    public boolean isApplicable(SearchParams params) {
+    public boolean isApplicable(ScanRequestDTO requestDTO) {
+        SearchParams params = requestDTO.searchParams();
         return hasSizeParams(params);
     }
 
     @Override
-    public List<ValidationErrorDTO> validate(SearchParams params) {
+    public List<ValidationErrorDTO> validate(ScanRequestDTO requestDTO) {
+        SearchParams params = requestDTO.searchParams();
         List<ValidationErrorDTO> errors = new ArrayList<>();
         validateSize(params, errors);
 

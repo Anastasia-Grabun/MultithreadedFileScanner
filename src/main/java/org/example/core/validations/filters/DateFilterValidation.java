@@ -3,6 +3,7 @@ package org.example.core.validations.filters;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.example.core.validations.ValidationErrorFactory;
+import org.example.dto.ScanRequestDTO;
 import org.example.dto.SearchParams;
 import org.example.dto.ValidationErrorDTO;
 import org.springframework.stereotype.Component;
@@ -17,12 +18,14 @@ class DateFilterValidation implements FilterValidation {
     private final ValidationErrorFactory errorFactory;
 
     @Override
-    public boolean isApplicable(SearchParams params) {
+    public boolean isApplicable(ScanRequestDTO request) {
+        SearchParams params = request.searchParams();
         return params.modifiedAfter() != null;
     }
 
     @Override
-    public List<ValidationErrorDTO> validate(SearchParams params) {
+    public List<ValidationErrorDTO> validate(ScanRequestDTO request) {
+        SearchParams params = request.searchParams();
         List<ValidationErrorDTO> errors = new ArrayList<>();
         LocalDate modifiedAfter = params.modifiedAfter();
 

@@ -9,20 +9,17 @@ import java.util.List;
 public class FilterFactory {
 
     public static FileSearchFilter createFilter(SearchParams params) {
+        if (params == null) {
+            return file -> true;
+        }
+
         List<FileSearchFilter> filters = new ArrayList<>();
 
-        addNameFilterIfNeeded(params, filters);
         addSizeFilterIfNeeded(params, filters);
         addDateFilterIfNeeded(params, filters);
         addContentFilterIfNeeded(params, filters);
 
         return combineFilters(filters);
-    }
-
-    private static void addNameFilterIfNeeded(SearchParams params, List<FileSearchFilter> filters) {
-        if (params.namePattern() != null) {
-            filters.add(new NameSearchFilter(params.namePattern()));
-        }
     }
 
     private static void addSizeFilterIfNeeded(SearchParams params, List<FileSearchFilter> filters) {
