@@ -39,5 +39,6 @@ public class BatchScanManager {
 
         return results;
     }
+
 }
 

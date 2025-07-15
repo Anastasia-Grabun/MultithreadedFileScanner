@@ -16,6 +16,7 @@ public record ScanResultDTO(
     public static ScanResultDTO withErrors(List<ValidationErrorDTO> errors) {
         return new ScanResultDTO(Collections.emptyList(), errors);
     }
+
 }
 
 

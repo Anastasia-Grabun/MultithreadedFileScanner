@@ -1,5 +1,9 @@
 package org.example.dto;
 
-public record ScanRequestDTO(String path, String mask, SearchParams searchParams) {}
+public record ScanRequestDTO(
+        String path,
+        String mask,
+        SearchParams searchParams)
+{}
 
 
