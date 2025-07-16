@@ -2,6 +2,8 @@ package org.example.core.services;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.example.core.cache.ScanResultCache;
 import org.example.core.services.filters.FileSearchFilter;
 import org.example.core.services.filters.FilterFactory;
 import org.example.core.util.MaskToRegexConverter;
@@ -12,6 +14,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.regex.Pattern;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class FileFinder {
@@ -19,15 +22,28 @@ public class FileFinder {
     private final FileScanner scanner;
     private final FileFilterService filterService;
     private final FilterFactory filterFactory;
+    private final ScanResultCache cache;
 
     public List<String> findFiles(String startDir, String mask, SearchParams searchParams)
             throws IOException, InterruptedException {
 
-        Pattern pattern = Pattern.compile(MaskToRegexConverter.convert(mask));
-        FileSearchFilter filter = filterFactory.createFilter(searchParams);
-        List<Path> allFiles = scanner.scan(startDir);
+        String cacheKey = startDir + "|" + mask + "|" + searchParams;
 
-        return filterService.applyFilters(allFiles, pattern, filter);
+        List<String> cachedResult = cache.get(cacheKey);
+        if (cachedResult != null) {
+            log.info("📦 Cache hit for key: {}", cacheKey);
+            return cachedResult;
+        }
+
+        Pattern pattern = Pattern.compile(MaskToRegexConverter.convert(mask));
+        FileSearchFilter filter = FilterFactory.createFilter(searchParams);
+        List<Path> allFiles = scanner.scan(startDir);
+        List<String> result = filterService.applyFilters(allFiles, pattern, filter);
+
+        log.info("Cache put for key: {}", cacheKey);
+        cache.put(cacheKey, result);
+
+        return result;
     }
 
 }

@@ -24,6 +24,8 @@ dependencies {
 
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 
+    implementation 'com.google.guava:guava:33.1.0-jre'
+
     compileOnly('org.projectlombok:lombok:1.18.32')
     annotationProcessor('org.projectlombok:lombok:1.18.32')
 
