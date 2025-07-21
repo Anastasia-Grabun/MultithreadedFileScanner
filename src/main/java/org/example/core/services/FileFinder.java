@@ -21,7 +21,6 @@ public class FileFinder {
 
     private final FileScanner scanner;
     private final FileFilterService filterService;
-    private final FilterFactory filterFactory;
     private final ScanResultCache cache;
 
     public List<String> findFiles(String startDir, String mask, SearchParams searchParams)
@@ -31,7 +30,7 @@ public class FileFinder {
 
         List<String> cachedResult = cache.get(cacheKey);
         if (cachedResult != null) {
-            log.info("📦 Cache hit for key: {}", cacheKey);
+            log.info("Cache hit for key: {}", cacheKey);
             return cachedResult;
         }
 

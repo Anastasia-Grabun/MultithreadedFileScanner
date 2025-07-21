@@ -20,6 +20,13 @@ public class ScannerService {
     private final FileFinder fileFinder;
 
     public ScanResultDTO scan(ScanRequestDTO request) {
+        try {
+            Thread.sleep(3000); // имитация долгого поиска
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return ScanResultDTO.withErrors(List.of(new ValidationErrorDTO("INTERRUPTED", "Scan was cancelled")));
+        }
+
         List<ValidationErrorDTO> validationErrors = collectValidationErrors(request);
         if (!validationErrors.isEmpty()) {
             return ScanResultDTO.withErrors(validationErrors);
@@ -27,6 +34,7 @@ public class ScannerService {
 
         return performFileScan(request);
     }
+
 
     private List<ValidationErrorDTO> collectValidationErrors(ScanRequestDTO request) {
         List<ValidationErrorDTO> errors = new ArrayList<>();

@@ -27,7 +27,7 @@ class ContentFilterValidation implements FilterValidation {
 
         String mask = request.mask();
         if (mask == null || !mask.endsWith(".txt")) {
-            errors.add(errorFactory.buildError("ERROR_CODE_7")); // "Content search requires *.txt mask"
+            errors.add(errorFactory.buildError("ERROR_CODE_7"));
         }
 
         return errors;
