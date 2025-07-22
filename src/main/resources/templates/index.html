@@ -11,100 +11,38 @@
 
 <h3>Start New Scan</h3>
 
-<!-- ===== Search Task 1 ===== -->
-<form th:action="@{/scan}" method="post">
-    <fieldset>
-        <legend>Search Task 1</legend>
+<form th:action="@{/scan}" method="post" th:object="${scanBatchForm}">
+    <div th:each="task, iterStat : *{tasks}">
+        <fieldset>
+            <legend th:text="'Search Task ' + ${iterStat.index + 1}"></legend>
 
-        <label>Directory:
-            <input type="text" name="path" value="D:/example/path" required />
-        </label><br/>
+            <label>Directory:
+                <input type="text" th:field="*{tasks[__${iterStat.index}__].path}" required />
+            </label><br/>
 
-        <label>Pattern:
-            <input type="text" name="mask" value="*.txt" required />
-        </label><br/>
+            <label>Pattern:
+                <input type="text" th:field="*{tasks[__${iterStat.index}__].mask}" required />
+            </label><br/>
 
-        <label>Content contains:
-            <input type="text" name="contentContains" placeholder="Optional" />
-        </label><br/>
+            <label>Content contains:
+                <input type="text" th:field="*{tasks[__${iterStat.index}__].contentContains}" />
+            </label><br/>
 
-        <label>Min Size (bytes):
-            <input type="number" name="minSize" placeholder="Optional" />
-        </label><br/>
+            <label>Min Size (bytes):
+                <input type="number" th:field="*{tasks[__${iterStat.index}__].minSize}" />
+            </label><br/>
 
-        <label>Max Size (bytes):
-            <input type="number" name="maxSize" placeholder="Optional" />
-        </label><br/>
+            <label>Max Size (bytes):
+                <input type="number" th:field="*{tasks[__${iterStat.index}__].maxSize}" />
+            </label><br/>
 
-        <label>Modified After (yyyy-MM-dd):
-            <input type="text" name="modifiedAfter" placeholder="Optional" />
-        </label><br/>
-    </fieldset>
-    <button type="submit">Start Scan</button>
-</form>
+            <label>Modified After (yyyy-MM-dd):
+                <input type="text" th:field="*{tasks[__${iterStat.index}__].modifiedAfter}" />
+            </label><br/>
+        </fieldset>
+    </div>
 
-<!-- ===== Search Task 2 ===== -->
-<form th:action="@{/scan}" method="post">
-    <fieldset>
-        <legend>Search Task 2</legend>
-
-        <label>Directory:
-            <input type="text" name="path" value="/home/dev/src" required />
-        </label><br/>
-
-        <label>Pattern:
-            <input type="text" name="mask" value="*.xml" required />
-        </label><br/>
-
-        <label>Content contains:
-            <input type="text" name="contentContains" />
-        </label><br/>
-
-        <label>Min Size:
-            <input type="number" name="minSize" />
-        </label><br/>
-
-        <label>Max Size:
-            <input type="number" name="maxSize" />
-        </label><br/>
-
-        <label>Modified After:
-            <input type="text" name="modifiedAfter" />
-        </label><br/>
-    </fieldset>
-    <button type="submit">Start Scan</button>
-</form>
-
-<!-- ===== Search Task 3 ===== -->
-<form th:action="@{/scan}" method="post">
-    <fieldset>
-        <legend>Search Task 3</legend>
-
-        <label>Directory:
-            <input type="text" name="path" value="/home/dev/resources" required />
-        </label><br/>
-
-        <label>Pattern:
-            <input type="text" name="mask" value="*.properties" required />
-        </label><br/>
-
-        <label>Content contains:
-            <input type="text" name="contentContains" value="server.port" />
-        </label><br/>
-
-        <label>Min Size:
-            <input type="number" name="minSize" />
-        </label><br/>
-
-        <label>Max Size:
-            <input type="number" name="maxSize" />
-        </label><br/>
-
-        <label>Modified After:
-            <input type="text" name="modifiedAfter" />
-        </label><br/>
-    </fieldset>
-    <button type="submit">Start Scan</button>
+    <button type="submit">Start Scan All Tasks</button>
 </form>
 
 <hr/>
@@ -119,3 +57,4 @@
 
 </body>
 </html>
+
