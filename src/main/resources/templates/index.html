@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="UTF-8">
-    <title>File Scanner</title>
-</head>
-<body>
+<body xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <h2>Welcome, <span sec:authentication="name">User</span></h2>
 
 <h3>Start New Scan</h3>
+
+<div th:if="${message}">
+    <p style="color: green;" th:text="${message}"></p>
+</div>
 
 <form th:action="@{/scan}" method="post" th:object="${scanBatchForm}">
     <div th:each="task, iterStat : *{tasks}">
@@ -56,5 +53,3 @@
 </form>
 
 </body>
-</html>
-

@@ -1,7 +1,9 @@
 package org.example.rest;
 
 import lombok.RequiredArgsConstructor;
+import org.example.core.security.UserContext;
 import org.example.core.services.BatchScanManager;
+import org.example.core.services.SearchTaskRegistry;
 import org.example.dto.ListRequestDTO;
 import org.example.dto.ScanBatchForm;
 import org.example.dto.ScanForm;
@@ -21,6 +23,8 @@ import java.util.List;
 public class PageController {
 
     private final BatchScanManager batchScanManager;
+    private final UserContext userContext;
+    private final SearchTaskRegistry taskRegistry;
 
     @GetMapping("/login")
     public String login() {
@@ -71,9 +75,20 @@ public class PageController {
 
     @PostMapping("/cancel")
     public String cancel(Model model) {
-        // TODO: Добавьте логику cancel, если нужна
-        model.addAttribute("scanBatchForm", new ScanBatchForm());
+        List<ScanForm> defaultTasks = List.of(
+                new ScanForm("D:/example/path", "*.txt", "", null, null, null),
+                new ScanForm("/home/dev/src", "*.xml", "", null, null, null),
+                new ScanForm("/home/dev/resources", "*.properties", "server.port", null, null, null)
+        );
+
+        ScanBatchForm scanBatchForm = new ScanBatchForm();
+        scanBatchForm.setTasks(defaultTasks);
+
+        model.addAttribute("scanBatchForm", scanBatchForm);
+        model.addAttribute("message", "All tasks have been cancelled.");
+
         return "index";
     }
+
 
 }
