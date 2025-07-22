@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Scan Results</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<h1>Scan Results</h1>
+
+<div th:each="result : ${results}">
+
+    <!-- Ошибки -->
+    <div th:if="${!#lists.isEmpty(result.errors)}">
+        <h2 style="color:red;">Errors</h2>
+        <ul>
+            <li th:each="err : ${result.errors}"
+                th:text="${err.errorCode + ': ' + err.description}">
+                ERR001: Something went wrong
+            </li>
+        </ul>
+    </div>
+
+    <!-- Найденные файлы -->
+    <div th:if="${!#lists.isEmpty(result.files)}">
+        <h2>Found Files</h2>
+        <ul>
+            <li th:each="file : ${result.files}" th:text="${file}">/path/to/file.txt</li>
+        </ul>
+    </div>
+
+</div>
+
+<div>
+    <a th:href="@{/}">← Back to Search</a>
+</div>
+</body>
+</html>

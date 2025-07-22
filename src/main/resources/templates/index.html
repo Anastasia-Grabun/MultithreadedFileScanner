@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>File Scanner</title>
+</head>
+<body>
+
+<h2>Welcome, <span sec:authentication="name">User</span></h2>
+
+<h3>Start New Scan</h3>
+
+<!-- ===== Search Task 1 ===== -->
+<form th:action="@{/scan}" method="post">
+    <fieldset>
+        <legend>Search Task 1</legend>
+
+        <label>Directory:
+            <input type="text" name="path" value="D:/example/path" required />
+        </label><br/>
+
+        <label>Pattern:
+            <input type="text" name="mask" value="*.txt" required />
+        </label><br/>
+
+        <label>Content contains:
+            <input type="text" name="contentContains" placeholder="Optional" />
+        </label><br/>
+
+        <label>Min Size (bytes):
+            <input type="number" name="minSize" placeholder="Optional" />
+        </label><br/>
+
+        <label>Max Size (bytes):
+            <input type="number" name="maxSize" placeholder="Optional" />
+        </label><br/>
+
+        <label>Modified After (yyyy-MM-dd):
+            <input type="text" name="modifiedAfter" placeholder="Optional" />
+        </label><br/>
+    </fieldset>
+    <button type="submit">Start Scan</button>
+</form>
+
+<!-- ===== Search Task 2 ===== -->
+<form th:action="@{/scan}" method="post">
+    <fieldset>
+        <legend>Search Task 2</legend>
+
+        <label>Directory:
+            <input type="text" name="path" value="/home/dev/src" required />
+        </label><br/>
+
+        <label>Pattern:
+            <input type="text" name="mask" value="*.xml" required />
+        </label><br/>
+
+        <label>Content contains:
+            <input type="text" name="contentContains" />
+        </label><br/>
+
+        <label>Min Size:
+            <input type="number" name="minSize" />
+        </label><br/>
+
+        <label>Max Size:
+            <input type="number" name="maxSize" />
+        </label><br/>
+
+        <label>Modified After:
+            <input type="text" name="modifiedAfter" />
+        </label><br/>
+    </fieldset>
+    <button type="submit">Start Scan</button>
+</form>
+
+<!-- ===== Search Task 3 ===== -->
+<form th:action="@{/scan}" method="post">
+    <fieldset>
+        <legend>Search Task 3</legend>
+
+        <label>Directory:
+            <input type="text" name="path" value="/home/dev/resources" required />
+        </label><br/>
+
+        <label>Pattern:
+            <input type="text" name="mask" value="*.properties" required />
+        </label><br/>
+
+        <label>Content contains:
+            <input type="text" name="contentContains" value="server.port" />
+        </label><br/>
+
+        <label>Min Size:
+            <input type="number" name="minSize" />
+        </label><br/>
+
+        <label>Max Size:
+            <input type="number" name="maxSize" />
+        </label><br/>
+
+        <label>Modified After:
+            <input type="text" name="modifiedAfter" />
+        </label><br/>
+    </fieldset>
+    <button type="submit">Start Scan</button>
+</form>
+
+<hr/>
+
+<form th:action="@{/cancel}" method="post">
+    <button type="submit">Cancel My Tasks</button>
+</form>
+
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Logout</button>
+</form>
+
+</body>
+</html>
